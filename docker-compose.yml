@@ -1,0 +1,38 @@
+name: document-uploader
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - '3000:3000'
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+
+  database:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+    ports:
+      - '3306:3306'
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u ${DATABASE_USER} --password=${DATABASE_PASSWORD}
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mysql_data:
