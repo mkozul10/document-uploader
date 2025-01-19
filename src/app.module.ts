@@ -7,6 +7,13 @@ import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './infrastructure/database/typeorm-config.service';
+import authConfig from './config/auth.config';
+import { APP_GUARD } from '@nestjs/core';
+
+import { User } from './core/shared/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import { AuthenticationModule } from './core/modules/authentication/authentication.module';
+import { UserJwtGuard } from './core/modules/authentication/guards/user-jwt.guard';
 
 @Module({
   imports: [
@@ -14,7 +21,7 @@ import { TypeOrmConfigService } from './infrastructure/database/typeorm-config.s
       isGlobal: true,
     }),
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig],
+      load: [appConfig, databaseConfig, authConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -22,8 +29,17 @@ import { TypeOrmConfigService } from './infrastructure/database/typeorm-config.s
       useClass: TypeOrmConfigService,
       inject: [ConfigModule],
     }),
+    TypeOrmModule.forFeature([User]),
+    AuthenticationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: UserJwtGuard,
+    },
+    JwtService,
+  ],
 })
 export class AppModule {}

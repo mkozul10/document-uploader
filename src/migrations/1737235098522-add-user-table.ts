@@ -48,6 +48,10 @@ export class AddUserTable1737235098522 implements MigrationInterface {
                       SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Hard delete is not allowed!';
                   ;`,
     );
+
+    await queryRunner.query(`
+        INSERT INTO user (username, password, role_id) VALUES ('user1', '$2a$10$uhWQm..FIro22XYciST7yuWgcbZnpKwYoeQv3gksQ8YXfAbfwALQW', (SELECT MAX(id) FROM role WHERE name LIKE 'user'));    
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
