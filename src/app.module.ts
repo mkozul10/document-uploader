@@ -14,6 +14,7 @@ import { User } from './core/shared/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationModule } from './core/modules/authentication/authentication.module';
 import { UserJwtGuard } from './core/modules/authentication/guards/user-jwt.guard';
+import { UserModule } from './core/modules/user/user.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UserJwtGuard } from './core/modules/authentication/guards/user-jwt.guar
     }),
     TypeOrmModule.forFeature([User]),
     AuthenticationModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

@@ -12,9 +12,9 @@ import { User } from './user.entity';
 @Entity({ name: 'role' })
 export class Role {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
-  id: string;
+  id: number;
 
-  @Column('varchar', { name: 'username', unique: true, length: 255 })
+  @Column('varchar', { name: 'name', unique: true, length: 255 })
   name: string;
 
   @CreateDateColumn({
