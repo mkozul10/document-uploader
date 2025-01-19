@@ -11,9 +11,9 @@ import { Reflector } from '@nestjs/core';
 
 import { User } from 'src/core/shared/entities/user.entity';
 import { Repository } from 'typeorm';
-import { IS_PUBLIC_KEY } from 'src/core/shared/decorators/public.decorator';
 
-export class UserJwtGuard implements CanActivate {
+export class AdminJwtGuard implements CanActivate {
+  private readonly adminRole = 'admin';
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -26,12 +26,6 @@ export class UserJwtGuard implements CanActivate {
     const accessTokenSecret = this.configService.get<string>(
       'auth.accessTokenSecret',
     );
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    if (isPublic) return true;
 
     const request = context.switchToHttp().getRequest();
     const accessToken = this.extractTokenFromRequest(request);
@@ -42,16 +36,30 @@ export class UserJwtGuard implements CanActivate {
       });
       const id = payload.sub;
       const user = await this.userRepository.findOneOrFail({
-        select: { id: true, username: true, refreshToken: true },
+        select: {
+          id: true,
+          username: true,
+          refreshToken: true,
+          role: { id: true, name: true },
+        },
         where: { id },
+        relations: { role: true },
       });
-
+      console.log(user);
       if (!user.refreshToken) {
         throw new UnauthorizedException();
       }
+
+      if (user?.role?.name !== this.adminRole) {
+        throw new ForbiddenException();
+      }
+
       request['user'] = { id: user.id, username: user.username };
       return true;
     } catch (error) {
+      if (error instanceof ForbiddenException) {
+        throw new ForbiddenException();
+      }
       throw new UnauthorizedException();
     }
   }
