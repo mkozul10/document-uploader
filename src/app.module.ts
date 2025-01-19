@@ -15,6 +15,9 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthenticationModule } from './core/modules/authentication/authentication.module';
 import { UserJwtGuard } from './core/modules/authentication/guards/user-jwt.guard';
 import { UserModule } from './core/modules/user/user.module';
+import gcpConfig from './config/gcp.config';
+import { DocumentModule } from './core/modules/document/document.module';
+import { GcpModule } from './infrastructure/gcp/gcp.module';
 
 @Module({
   imports: [
@@ -22,7 +25,7 @@ import { UserModule } from './core/modules/user/user.module';
       isGlobal: true,
     }),
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig, authConfig],
+      load: [appConfig, databaseConfig, authConfig, gcpConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -33,6 +36,8 @@ import { UserModule } from './core/modules/user/user.module';
     TypeOrmModule.forFeature([User]),
     AuthenticationModule,
     UserModule,
+    DocumentModule,
+    GcpModule,
   ],
   controllers: [AppController],
   providers: [
