@@ -50,8 +50,8 @@ export class AddUserTable1737235098522 implements MigrationInterface {
 
     await queryRunner.query(`
         INSERT INTO user (username, password, role_id) VALUES
-        ('user1', '$2a$10$uhWQm..FIro22XYciST7yuWgcbZnpKwYoeQv3gksQ8YXfAbfwALQW', (SELECT MAX(id) FROM role WHERE name LIKE 'user')),
-        ('admin1', '$2a$10$uhWQm..FIro22XYciST7yuWgcbZnpKwYoeQv3gksQ8YXfAbfwALQW', (SELECT MAX(id) FROM role WHERE name LIKE 'admin'))    
+        ('user1', '$2a$10$uhWQm..FIro22XYciST7yuWgcbZnpKwYoeQv3gksQ8YXfAbfwALQW', (SELECT id FROM role WHERE name LIKE 'user')),
+        ('admin1', '$2a$10$uhWQm..FIro22XYciST7yuWgcbZnpKwYoeQv3gksQ8YXfAbfwALQW', (SELECT id FROM role WHERE name LIKE 'admin'));
     `);
   }
 
