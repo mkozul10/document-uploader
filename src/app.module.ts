@@ -18,6 +18,8 @@ import { UserModule } from './core/modules/user/user.module';
 import gcpConfig from './config/gcp.config';
 import { DocumentModule } from './core/modules/document/document.module';
 import { GcpModule } from './infrastructure/gcp/gcp.module';
+import { MailModule } from './core/modules/mail/mail.module';
+import mailConfig from './config/mail.config';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { GcpModule } from './infrastructure/gcp/gcp.module';
       isGlobal: true,
     }),
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig, authConfig, gcpConfig],
+      load: [appConfig, databaseConfig, authConfig, gcpConfig, mailConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -38,6 +40,7 @@ import { GcpModule } from './infrastructure/gcp/gcp.module';
     UserModule,
     DocumentModule,
     GcpModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [

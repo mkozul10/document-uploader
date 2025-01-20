@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Res,
@@ -20,7 +22,6 @@ import { ResponseDocumentDto } from './dto/response-document.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { ParamIdDto } from 'src/core/shared/dto/param-id.dto';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetDocumentDataDto } from './dto/get-document-data.dto';
 
 @Controller('document')
@@ -30,6 +31,7 @@ export class DocumentController {
   @Post('upload')
   @UseInterceptors(ClassSerializerInterceptor, FileInterceptor('file'))
   @UploadDocumentSwaggerDecorators()
+  @HttpCode(HttpStatus.OK)
   async upload(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<ResponseDocumentDto> {

@@ -3,8 +3,8 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
+  ApiCreatedResponse,
   ApiInternalServerErrorResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -24,7 +24,7 @@ export function CreateUserSwaggerDecorators() {
       type: CreateUserDto,
       required: true,
     }),
-    ApiOkResponse({
+    ApiCreatedResponse({
       description: 'The user has been successfully created',
       type: CreateUserResponseDto,
     }),
