@@ -45,7 +45,7 @@ export class AdminJwtGuard implements CanActivate {
         where: { id },
         relations: { role: true },
       });
-      console.log(user);
+
       if (!user.refreshToken) {
         throw new UnauthorizedException();
       }

@@ -20,7 +20,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrations: [path.join(__dirname, '../../migrations/*{.ts,.js}')],
       migrationsRun: true,
       synchronize: false,
-      // logging: true,
+      logging: true,
     };
   }
 }
