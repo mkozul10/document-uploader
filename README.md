@@ -26,23 +26,29 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+## Create .env file and configure it contents
 
 ```bash
-$ npm install
+$ cp .env.example .env
 ```
 
-## Compile and run the project
+## Create GCP private key file
 
 ```bash
-# development
-$ npm run start
+$ cd src/config && touch google-storage-service-account.json
+```
 
-# watch mode
-$ npm run start:dev
+## Start dev enviroment
 
-# production mode
-$ npm run start:prod
+```bash
+# build image
+$ make build
+
+# start services
+$ make start
+
+# stop services
+$ make stop
 ```
 
 ## Run tests
