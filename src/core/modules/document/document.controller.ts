@@ -2,10 +2,12 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  ParseFilePipe,
   Post,
   Res,
   UploadedFile,
@@ -33,7 +35,12 @@ export class DocumentController {
   @UploadDocumentSwaggerDecorators()
   @HttpCode(HttpStatus.OK)
   async upload(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' })],
+      }),
+    )
+    file: Express.Multer.File,
   ): Promise<ResponseDocumentDto> {
     return await this.documentService.uploadFile(file);
   }
